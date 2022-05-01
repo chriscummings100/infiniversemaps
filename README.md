@@ -16,6 +16,7 @@ Combined, the full data released is enough to create maps of the whole Infinvier
 Current samples:
 * download.py: downloads latest map data - run this before using other scripts
 * draw.py: generates a jpeg with a map of an area of infiniverse
+* storefronts.py: dump out a csv and tabsv file with list of store fronts in Infiniverse
 
 Enjoy!
 
