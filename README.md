@@ -3,6 +3,12 @@ Examples for downloading and processing public infiniverse map data
 
 This repo contains some samples and demos for accessing the Infiniverse map data for the Multiverse VR App (https://multiverseonline.io/)
 
+Setup
+* get python installed (written with 3.8 though doesn't use any fancy features)
+* download/clone the repo
+* run "pip install -r requirements.txt" in the folder to install python requirements
+* run download.py to download latest Infiniverse data
+
 The current early Beta api simply downloads static files that are regularly updated, which contain the following:
 * a root map.json file that contains a list of all districts (and urls to download them)
 * district data and geometry
