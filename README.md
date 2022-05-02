@@ -20,6 +20,7 @@ The current early Beta api simply downloads static files that are regularly upda
 Combined, the full data released is enough to create maps of the whole Infinvierse, generate street/building directories, or probably another 100 things we've not thought of.
 
 Current samples:
+# settings.py: shared settings
 * download.py: downloads latest map data - run this before using other scripts
 * draw.py: generates a jpeg with a map of an area of infiniverse
 * storefronts.py: dump out a csv and tabsv file with list of store fronts in Infiniverse

@@ -5,14 +5,7 @@
 import sys
 import json
 import os
-
-#Date to download
-MAP_DATE = "2022-05-01"
-DATA_DIR = os.path.abspath(f"data/{MAP_DATE}")
-
-#load map file
-with open (f"{DATA_DIR}/map.json","rb") as f:
-    MAP = json.load(f)
+import settings
 
 #json for a storefront slot
 #    {
@@ -35,8 +28,8 @@ COLUMNS = ['code','owner','domain','location','destination','iconurl']
 with open("stores.csv","wt") as outf:
     txt = ','.join(COLUMNS) 
     outf.write(txt + "\n")
-    for district_record in MAP['districts']:
-        with open(f"{DATA_DIR}/{district_record['code']}.json","rb") as f:
+    for district_record in settings.MAP['districts']:
+        with open(f"{settings.DATA_DIR}/{district_record['code']}.json","rb") as f:
             district = json.load(f)
             for slot in district['slots']:
                 if slot['slot'] == 65538:  #65538 is the magic number for a store!
@@ -47,8 +40,8 @@ with open("stores.csv","wt") as outf:
 with open("stores.tab","wt") as outf:
     txt = '\t'.join(COLUMNS) 
     outf.write(txt + "\n")
-    for district_record in MAP['districts']:
-        with open(f"{DATA_DIR}/{district_record['code']}.json","rb") as f:
+    for district_record in settings.MAP['districts']:
+        with open(f"{settings.DATA_DIR}/{district_record['code']}.json","rb") as f:
             district = json.load(f)
             for slot in district['slots']:
                 if slot['slot'] == 65538:  #65538 is the magic number for a store!
