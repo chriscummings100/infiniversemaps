@@ -11,7 +11,7 @@ import json
 CDN_URL = "https://devblobs.shapevrcloud.com/infiniverse/public"
 
 #Date of map data to load
-MAP_DATE = "2022-05-01"
+MAP_DATE = "2022-05-04"
 
 #----------------------------------------------------------------------
 #Derived constants
