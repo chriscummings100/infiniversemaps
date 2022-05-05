@@ -37,6 +37,16 @@ def drawpoly(draw, poly, fill, line, width=1):
         transformed = [transformpoint(x,draw) for x in poly]
         draw.polygon(transformed, fill, line, width)
 
+#draws a ground polygon with the correct colour + style
+def drawground(draw, poly, ground_type):
+    if poly and len(poly) >= 3:
+        col = (150,150,150)
+        if ground_type == 'Grass':
+            col = (50,150,50)
+        elif ground_type == 'Water':
+            col = (75,75,200)
+        drawpoly(draw, poly, col, None)
+
 #loads a district and draws it into the image
 def drawdistrict(code, draw):
     try:
@@ -54,12 +64,9 @@ def drawdistrict(code, draw):
             draw.polygon(new_poly, (100,100,100), None)
 
             for subdistrict in district['subdistricts']:
-                col = (150,150,150)
-                if subdistrict['innerfloor'] == 'Grass':
-                    col = (50,150,50)
-                elif subdistrict['innerfloor'] == 'Water':
-                    col = (75,75,200)
-                drawpoly(draw, subdistrict['innerpoly'], col, None)
+                drawground(draw,subdistrict['curbpoly'],'Curb')
+                drawground(draw,subdistrict['outerpoly'],subdistrict['outerfloor'])
+                drawground(draw,subdistrict['innerpoly'],subdistrict['innerfloor'])
 
             for building in district['buildings']:
                 drawpoly(draw, building['boundingpoly'], (200,200,200), None)
