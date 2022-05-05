@@ -29,6 +29,12 @@ def main():
     global count 
     global num_districts
 
+    #download
+    latest_rsp = requests.get(f"{settings.CDN_URL}/latest.txt")
+    latest = latest_rsp.text.splitlines()[0]
+    settings.MAP_DATE = latest
+    settings.init()
+
     #clear data
     if os.path.exists(settings.DATA_DIR):
         shutil.rmtree(settings.DATA_DIR, ignore_errors=True)
@@ -54,6 +60,9 @@ def main():
     #for district in map_data['districts']:
     #    download_district(district)
     #    done(None)
+
+    with open(f"{settings.DATA_DIR}/version.txt","wt") as f:
+        f.write(settings.MAP_DATE)
 
 if __name__ == '__main__':
     main()
