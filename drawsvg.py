@@ -7,6 +7,7 @@ import json
 import os
 import drawSvg
 import settings
+import math
 
 # centre and scale at which to drawPIL map
 # The [-904,-484] coordinates are grand central
@@ -15,15 +16,15 @@ DRAW_CENTRE_X = -904
 DRAW_CENTRE_Y = -484
 IMAGE_SIZE = 512
 
+FONT_SIZE = 8 * IMAGE_SIZE / DRAW_SIZE
 
 # transforms a point from Infiniverse coords to pixel position in image
 def transformpoint(point, d):
     res = (
         d.width * (0.5 + (point[0] - DRAW_CENTRE_X) / DRAW_SIZE),
-        d.height * (0.5 + -(point[1] - DRAW_CENTRE_Y) / DRAW_SIZE),
+        d.height * (0.5 + (point[1] - DRAW_CENTRE_Y) / DRAW_SIZE),
     )
     return res
-
 
 # draws a polygon from Infiniverse data to the image, applying correct transforms
 def drawpoly(draw, poly, fill, line, width=1):
@@ -52,6 +53,7 @@ def drawdistrict(code, draw):
         # print("Drawing district" + code)
 
         district = json.load(f)
+        junctions = { x['code']: x for x in district['junctions'] }
 
         bounding_poly = district['district']['boundingpoly']
 
@@ -64,7 +66,7 @@ def drawdistrict(code, draw):
 
         # use first line to show white border to highlight cell edges
         # drawPIL.polygon(new_poly, (100,100,100), (255,255,255))
-        draw.append(drawSvg.Lines(sx,sy, *out, fill='#646464', stroke='#FFFFFF'))
+        draw.append(drawSvg.Lines(sx,sy, *out, fill='#646464', stroke=None))
 
         for subdistrict in district['subdistricts']:
             drawground(draw,subdistrict['curbpoly'],'Curb')
@@ -72,7 +74,36 @@ def drawdistrict(code, draw):
             drawground(draw,subdistrict['innerpoly'],subdistrict['innerfloor'])
 
         for building in district['buildings']:
-            drawpoly(draw, building['boundingpoly'], '#68BAC8', '#000000')
+            drawpoly(draw, building['boundingpoly'], '#68BAC8', None)
+
+
+        for street in district['streets']:
+            junclist = street['junctions']
+            ja = junctions[junclist[0]]
+            jb = junctions[junclist[-1]]
+            japos = ja['pos']
+            jbpos = jb['pos']
+
+            centre = transformpoint( [(japos[0]+jbpos[0])*0.5, (japos[1]+jbpos[1])*0.5], draw)
+
+            dx = jbpos[1]-japos[1]
+            dy = jbpos[0]-japos[0]
+            
+            ang = math.degrees(math.atan2(dx,-dy))
+            if dy > 0:
+                ang += 180
+
+            fs = FONT_SIZE
+
+            if ja['code'].startswith('VJ') and jb['code'].startswith('VJ'):
+                fs *= 2
+
+            draw.append(drawSvg.Text(street['name'], fs, centre[0], centre[1], fill='black', font_weight="bold", text_anchor="middle", valign="middle",
+                transform=f'rotate({ang},{centre[0]},{-centre[1]})'))
+
+            
+
+            pass
 
 
 # create a new image
