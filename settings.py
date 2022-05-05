@@ -1,3 +1,8 @@
+#Core settings + setup script. Configures globals and triggers download
+#of latest data if there is new stuff available
+#Author: Chris Cummings
+#License: MIT
+
 import os 
 import json 
 import requests

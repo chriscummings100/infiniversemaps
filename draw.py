@@ -20,8 +20,7 @@ IMAGE_SIZE = 4096
 #DRAW_CENTRE_X = 0
 #DRAW_CENTRE_Y = 0
 #IMAGE_SIZE = 4096
-
-
+   
 
 #transforms a point from Infiniverse coords to pixel position in image
 def transformpoint(point, draw):
