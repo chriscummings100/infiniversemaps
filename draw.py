@@ -10,10 +10,17 @@ import settings
 
 #centre and scale at which to draw map
 #The [-904,-484] coordinates are grand central
-DRAW_SIZE = 1000
+DRAW_SIZE = 1500
 DRAW_CENTRE_X = -904
 DRAW_CENTRE_Y = -484
-IMAGE_SIZE = 512
+IMAGE_SIZE = 4096
+
+#these numbers roughly draw the whole map at 4k resolution
+#DRAW_SIZE = 20000
+#DRAW_CENTRE_X = 0
+#DRAW_CENTRE_Y = 0
+#IMAGE_SIZE = 4096
+   
 
 #transforms a point from Infiniverse coords to pixel position in image
 def transformpoint(point, draw):
@@ -29,32 +36,42 @@ def drawpoly(draw, poly, fill, line, width=1):
         transformed = [transformpoint(x,draw) for x in poly]
         draw.polygon(transformed, fill, line, width)
 
+#draws a ground polygon with the correct colour + style
+def drawground(draw, poly, ground_type):
+    if poly and len(poly) >= 3:
+        col = (150,150,150)
+        if ground_type == 'Grass':
+            col = (50,150,50)
+        elif ground_type == 'Water':
+            col = (75,75,200)
+        drawpoly(draw, poly, col, None)
+
 #loads a district and draws it into the image
 def drawdistrict(code, draw):
-    with open(f"{settings.DATA_DIR}/{code}.json","rb") as f:
-        print("Drawing district" + code)
+    try:
+        with open(f"{settings.DATA_DIR}/{code}.json","rb") as f:
+            print("Drawing district" + code)
 
-        district = json.load(f)
+            district = json.load(f)
 
-        bounding_poly = district['district']['boundingpoly']
+            bounding_poly = district['district']['boundingpoly']
 
-        new_poly = [transformpoint(x,draw) for x in bounding_poly]
+            new_poly = [transformpoint(x,draw) for x in bounding_poly]
 
-        #use first line to show white border to highlight cell edges
-        #draw.polygon(new_poly, (100,100,100), (255,255,255))
-        draw.polygon(new_poly, (100,100,100), (255,255,255), 0)
+            #use first line to show white border to highlight cell edges
+            #draw.polygon(new_poly, (100,100,100), (255,255,255))
+            draw.polygon(new_poly, (100,100,100), None)
 
-        for subdistrict in district['subdistricts']:
-            col = (150,150,150)
-            if subdistrict['innerfloor'] == 'Grass':
-                col = (50,150,50)
-            elif subdistrict['innerfloor'] == 'Water':
-                col = (75,75,200)
-            drawpoly(draw, subdistrict['innerpoly'], col, None)
+            for subdistrict in district['subdistricts']:
+                drawground(draw,subdistrict['curbpoly'],'Curb')
+                drawground(draw,subdistrict['outerpoly'],subdistrict['outerfloor'])
+                drawground(draw,subdistrict['innerpoly'],subdistrict['innerfloor'])
 
-        for building in district['buildings']:
-            drawpoly(draw, building['boundingpoly'], (200,200,200), (0,0,0))
+            for building in district['buildings']:
+                drawpoly(draw, building['boundingpoly'], (200,200,200), None)
 
+    except Exception as err:
+        print(err)
 
 #create a new image
 with Image.new("RGB", (IMAGE_SIZE, IMAGE_SIZE), (255, 255, 255)) as im:

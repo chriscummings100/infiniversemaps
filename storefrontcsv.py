@@ -30,16 +30,14 @@ with open("stores.csv","wt") as outf:
     outf.write(txt + "\n")
     for district_record in settings.MAP['districts']:
         try:
-            fn = f"{settings.DATA_DIR}/{district_record['code']}.json"
-            #print(fn)
-            with open(fn,"rb") as f:
+            with open(f"{settings.DATA_DIR}/{district_record['code']}.json","rb") as f:
                 district = json.load(f)
                 for slot in district['slots']:
                     if slot['slot'] == 65538:  #65538 is the magic number for a store!
                         txt = ",".join([str(slot.get(x,"")) for x in COLUMNS])
                         outf.write(txt + "\n")
         except Exception as err:
-            print(f"  [{fn}] ERROR: {err}")
+            print(f"Error loading {district_record['code']}: {err}")
 
 #Dirty copy and paste to generate TABSV instead
 with open("stores.tab","wt") as outf:
@@ -47,13 +45,11 @@ with open("stores.tab","wt") as outf:
     outf.write(txt + "\n")
     for district_record in settings.MAP['districts']:
         try:
-            fn = f"{settings.DATA_DIR}/{district_record['code']}.json"
-            #print(fn)
-            with open(fn,"rb") as f:
+            with open(f"{settings.DATA_DIR}/{district_record['code']}.json","rb") as f:
                 district = json.load(f)
                 for slot in district['slots']:
                     if slot['slot'] == 65538:  #65538 is the magic number for a store!
                         txt = "\t".join([str(slot.get(x,"")) for x in COLUMNS])
                         outf.write(txt + "\n")
         except Exception as err:
-            print(f"  [{fn}] ERROR: {err}")
+            print(f"Error loading {district_record['code']}: {err}")
