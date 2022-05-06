@@ -31,6 +31,7 @@ if os.path.exists("data/version.txt"):
 #check for mismatch that requires download
 if MAP_DATE != LATEST:
     downloader.run(CDN_URL)
+    MAP_DATE = LATEST
 
 #----------------------------------------------------------------------
 #Derived constants
