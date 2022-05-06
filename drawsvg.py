@@ -87,30 +87,38 @@ def drawdistrict(code, draw):
             for building in district['buildings']:
                 drawpoly(draw, building['boundingpoly'], '#68BAC8', None)
 
+            #render streets (note: ideally this would be done in whole 2nd pass, so neighbour districts don't stomp streets)
             if STREET_NAMES:
                 for street in district['streets']:
+                    #get the first+last junction ids from the street, then use to get the junctions and their positions
                     junclist = street['junctions']
                     ja = junctions[junclist[0]]
                     jb = junctions[junclist[-1]]
                     japos = ja['pos']
                     jbpos = jb['pos']
 
+                    #calculate centre of the street (average of start+end positions)
                     centre = transformpoint( [(japos[0]+jbpos[0])*0.5, (japos[1]+jbpos[1])*0.5], draw)
 
+                    #calculate vector from start to end, and use to work out orientation of street
                     dx = jbpos[1]-japos[1]
-                    dy = jbpos[0]-japos[0]
-                    
+                    dy = jbpos[0]-japos[0]                    
                     ang = math.degrees(math.atan2(dx,-dy))
+
+                    #if dy is > 0, text will end up right->left, so rotate 180 degrees
                     if dy > 0:
                         ang += 180
 
+                    #choose font size, doubling if both junctions start with 'VJ', meaning they are large 
+                    #district level junctions, rather than smaller inter-district junctions
                     fs = FONT_SIZE
-
                     if ja['code'].startswith('VJ') and jb['code'].startswith('VJ'):
                         fs *= 2
 
+                    #draw the text
                     draw.append(drawSvg.Text(street['name'], fs, centre[0], centre[1], fill='black', font_weight="bold", text_anchor="middle", valign="middle",
                         transform=f'rotate({ang},{centre[0]},{-centre[1]})'))
+                        
     except Exception as err:
         print(f"Error drawing district {code}: {err}")
 
