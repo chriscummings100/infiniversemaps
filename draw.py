@@ -10,16 +10,16 @@ import settings
 
 #centre and scale at which to draw map
 #The [-904,-484] coordinates are grand central
-DRAW_SIZE = 1500
-DRAW_CENTRE_X = -904
-DRAW_CENTRE_Y = -484
-IMAGE_SIZE = 4096
+#DRAW_SIZE = 1500
+#DRAW_CENTRE_X = -904
+#DRAW_CENTRE_Y = -484
+#IMAGE_SIZE = 4096
 
 #these numbers roughly draw the whole map at 4k resolution
-#DRAW_SIZE = 20000
-#DRAW_CENTRE_X = 0
-#DRAW_CENTRE_Y = 0
-#IMAGE_SIZE = 4096
+DRAW_SIZE = 20000
+DRAW_CENTRE_X = 0
+DRAW_CENTRE_Y = 0
+IMAGE_SIZE = 4096
    
 
 #transforms a point from Infiniverse coords to pixel position in image
