@@ -8,6 +8,7 @@ import os
 from PIL import Image, ImageDraw
 import settings
 
+
 #centre and scale at which to draw map
 #The [-904,-484] coordinates are grand central
 #DRAW_SIZE = 1500

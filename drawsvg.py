@@ -17,13 +17,13 @@ import math
 #IMAGE_SIZE = 4096
 
 #these numbers roughly draw the whole map at 4k resolution
-DRAW_SIZE = 20000
+DRAW_SIZE = 25000
 DRAW_CENTRE_X = 0
 DRAW_CENTRE_Y = 0
 IMAGE_SIZE = 4096
 
 #toggle to decide whether to add street names
-STREET_NAMES = True
+STREET_NAMES = False
 
 #size of font
 FONT_SIZE = 8 * IMAGE_SIZE / DRAW_SIZE
@@ -118,7 +118,7 @@ def drawdistrict(code, draw):
                     #draw the text
                     draw.append(drawSvg.Text(street['name'], fs, centre[0], centre[1], fill='black', font_weight="bold", text_anchor="middle", valign="middle",
                         transform=f'rotate({ang},{centre[0]},{-centre[1]})'))
-                        
+
     except Exception as err:
         print(f"Error drawing district {code}: {err}")
 
