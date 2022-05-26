@@ -5,3 +5,4 @@ import os
 
 
 subprocess.call("gsutil -m rsync -r d:/dev/domains/ftl/ftldomainunity/publicdata gs://multiverse-dev-blobs/infiniverse/public", shell=True)
+subprocess.call("gsutil -m rsync -r ./map gs://multiverse-dev-blobs/infiniverse/maps", shell=True)

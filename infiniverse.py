@@ -9,6 +9,7 @@ Vector2 = Tuple[float]
 Vector3 = Tuple[float]
 Color = Tuple[float] | str
 Polygon = List[Vector2]
+Color = Tuple[float] | str
 
 class FloorType(Enum):
     NoFloor = "None"
@@ -194,7 +195,7 @@ def loadmap(fn: str)->Map:
 def parsedistrictinfo(text: str)->Map:
     return DistrictInfo(json.loads(text))
 
-def loaddistrictinfo(fn: str)->Map:
+def loaddistrictinfo(fn: str)->DistrictInfo:
     with open(fn,"rb") as f:
         return parsedistrictinfo(f.read())
 
